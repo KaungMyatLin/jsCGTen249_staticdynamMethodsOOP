@@ -113,7 +113,7 @@ class ProductList {
 // alternatively and easier to imagine.
 class Shop {
   static cart;
-  static init() {
+  static init() { 
     const renderHook = document.getElementById('app');
     this.cart = new Cart();
     const cartEl = this.cart.render();
