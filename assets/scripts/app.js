@@ -11,10 +11,14 @@ class Product {
     this.price = price;
   }
 }
-
 class Cart {
   items = [];
-
+  addProduct (product) {
+    console.log(this);
+    console.log(product);
+    this.items.push(product)
+    this.totalOutput.innerHTML = `<h2>Total \$${1}</h2>`
+  }
   render() {
     const cartEl = document.createElement('section');
     cartEl.innerHTML = `
@@ -22,6 +26,7 @@ class Cart {
       <button> Order Now! </button>
     `
     cartEl.className= 'cart';
+    this.totalOutput = cartEl.querySelector('h2');
     return cartEl;
   }
 }
@@ -29,12 +34,10 @@ class ProductItem {
   constructor(product) {
     this.product = product;
   }
-
   addToCart() {
-    console.log('Adding product to cart...');
-    console.log(this.product);
+    // below code, not utilizing objs but on class itself. That means we only utilize one class solely.
+    Shop.addProductToCart(this.product)    // important change
   }
-
   render() {
     const prodEl = document.createElement('li');
     prodEl.className = 'product-item';
@@ -69,9 +72,6 @@ class ProductList {
       89.99
     )
   ];
-
-  constructor() {}
-
   render() {
     const prodList = document.createElement('ul');
     prodList.className = 'product-list';
@@ -83,17 +83,47 @@ class ProductList {
     return prodList;
   }
 }
+// class Shop {
+//   static cart;
+//   render() {
+//     const renderHook = document.getElementById('app');
+//     this.cart = new Cart();                         // important change
+//     const cartEl = this.cart.render();              // important change
+//     const productList = new ProductList();
+//     const prodListEl = productList.render();
+//     renderHook.append(cartEl);
+//     renderHook.append(prodListEl);
+
+//   }
+// }
+// class App {                       // helper class, all static methods for dynamic classes to form one app.
+//   static init() {
+//     const shop = new Shop();
+//     shop.render();
+//     this.cart = shop.cart;        // lifting property up by one class, arriving now at static class.
+//   }
+//   static addProductToCart(product) {
+//     this.cart.addProduct(product)
+//     // despite addProduct is dyn_mthd, it is static now since cart is pointing to the static cart (written in shop)
+//     // addProductToCart can't be duplicated/ instanced.
+//   }
+// }
+// App.init();
+
+// alternatively and easier to imagine.
 class Shop {
-  render() {
+  static cart;
+  static init() { 
     const renderHook = document.getElementById('app');
-    const cart = new Cart();
-    const cartEl = cart.render();
+    this.cart = new Cart();
+    const cartEl = this.cart.render();
     const productList = new ProductList();
     const prodListEl = productList.render();
     renderHook.append(cartEl);
     renderHook.append(prodListEl);
-
+  }
+  static addProductToCart(product) {
+    this.cart.addProduct(product)
   }
 }
-const shop = new Shop();
-shop.render();
+Shop.init();
