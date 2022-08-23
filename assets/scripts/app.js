@@ -36,7 +36,7 @@ class ProductItem {
   }
   addToCart() {
     // below code, not utilizing objs but on class itself. That means we only utilize one class solely.
-    App.addProductToCart(this.product)    // important change
+    Shop.addProductToCart(this.product)    // important change
   }
   render() {
     const prodEl = document.createElement('li');
@@ -83,29 +83,47 @@ class ProductList {
     return prodList;
   }
 }
+// class Shop {
+//   static cart;
+//   render() {
+//     const renderHook = document.getElementById('app');
+//     this.cart = new Cart();                         // important change
+//     const cartEl = this.cart.render();              // important change
+//     const productList = new ProductList();
+//     const prodListEl = productList.render();
+//     renderHook.append(cartEl);
+//     renderHook.append(prodListEl);
+
+//   }
+// }
+// class App {                       // helper class, all static methods for dynamic classes to form one app.
+//   static init() {
+//     const shop = new Shop();
+//     shop.render();
+//     this.cart = shop.cart;        // lifting property up by one class, arriving now at static class.
+//   }
+//   static addProductToCart(product) {
+//     this.cart.addProduct(product)
+//     // despite addProduct is dyn_mthd, it is static now since cart is pointing to the static cart (written in shop)
+//     // addProductToCart can't be duplicated/ instanced.
+//   }
+// }
+// App.init();
+
+// alternatively and easier to imagine.
 class Shop {
   static cart;
-  render() {
+  static init() {
     const renderHook = document.getElementById('app');
-    this.cart = new Cart();                         // important change
-    const cartEl = this.cart.render();              // important change
+    this.cart = new Cart();
+    const cartEl = this.cart.render();
     const productList = new ProductList();
     const prodListEl = productList.render();
     renderHook.append(cartEl);
     renderHook.append(prodListEl);
-
-  }
-}
-class App {                       // helper class, all static methods for dynamic classes to form one app.
-  static init() {
-    const shop = new Shop();
-    shop.render();
-    this.cart = shop.cart;        // lifting property up by one class, arriving now at static class.
   }
   static addProductToCart(product) {
     this.cart.addProduct(product)
-    // despite addProduct is dyn_mthd, it is static now since cart is pointing to the static cart (written in shop)
-    // addProductToCart can't be duplicated/ instanced.
   }
 }
-App.init();
+Shop.init();
